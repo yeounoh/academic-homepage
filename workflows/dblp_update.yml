@@ -1,0 +1,41 @@
+name: Automated DBLP Publication Update
+
+on:
+  # Schedule to run once a week, e.g., every Sunday at midnight (00:00 UTC)
+  schedule:
+    - cron: '0 0 * * 0'
+  # Allows manual triggering from the Actions tab in GitHub
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+        
+      - name: Run DBLP update script
+        # Make sure to place your Python script (update_dblp.py) in the repo root
+        run: python update_dblp.py
+        
+      - name: Commit and Push changes
+        # This action handles checking for changes, committing, and pushing.
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Automated: Update publication list from dblp 🤖'
+          # Only commit files in the publications directory
+          file_pattern: '_publications/*'
+          # The branch to commit to (usually main or master for gh-pages source)
+          branch: ${{ github.ref_name }}

@@ -12,9 +12,23 @@ navbar_title: Home
 
         {% include widgets/profile_card_bio_only.html %}
 
-        <!-- Debugging widgets -->
-        {% include widgets/debug_repo_name.html %}
-        {% include widgets/debug_url.html %}
+        <div class="row px-3 pt-4 pb-2">
+            <div class="col h3">
+                Research Domains
+            </div>
+        </div>
+        <div class="row grid mb-4">
+            {% for item in site.showcase %}
+            <div class="col-lg-4 col-md-6 p-2">
+                <div class="card border-0 shadow-sm bg-white h-100">
+                    <div class="card-body">
+                        <h5 class="card-title font-serif">{{ item.title }}</h5>
+                        <p class="card-text text-black/60 small">{{ item.description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
         {% if site.data.display.homepage.show_experience %}
             {% include widgets/experience_card.html %}
